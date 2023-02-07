@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +17,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('home');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::resource('transaksi', TransaksiController::class);
+    Route::resource('user', UserController::class);
+});
+
+Route::get('voucher/cetak-voucher', [VoucherController::class, 'cetakVoucher']);
+Route::post('voucher/cetak-voucher-banyak', [VoucherController::class, 'cetakVoucherBanyak']);
+Route::get('voucher/view-voucher/{id}', [VoucherController::class, 'viewVoucher']);
+Route::post('voucher/transaksi', [VoucherController::class, 'transaksi'])->name('voucher.transaksi');
