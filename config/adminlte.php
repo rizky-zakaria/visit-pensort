@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Panel Dashboard',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>Panel</b>-Dashboard',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -306,6 +306,11 @@ return [
             'url'  => 'transaksi',
             'icon' => 'fas fa-fw fa-chart-bar',
         ],
+        [
+            'text' => 'Download Scanner-app',
+            'url' => 'app/app-debug.apk',
+            'icon' => 'fab fa-app-store',
+        ]
     ],
 
     /*
