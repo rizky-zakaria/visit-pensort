@@ -40,4 +40,21 @@ class TransaksiController extends Controller
             'data' => $data
         ]);
     }
+
+    public function cekSaldo(Request $request)
+    {
+        $post = Voucher::find($request->id);
+        if ($post) {
+            return response()->json([
+                'status' => TRUE,
+                'message' => 'Saldo anda:',
+                'data' => $post
+            ]);
+        } else {
+            return response()->json([
+                'status' => FALSE,
+                'message' => 'Gagal mendapatkan saldo'
+            ]);
+        }
+    }
 }
