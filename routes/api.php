@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AktivasiController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\MasukController;
 use App\Http\Controllers\Api\TransaksiController;
@@ -25,5 +26,7 @@ Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('lo
 Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
 Route::post('/transaksi', [TransaksiController::class, 'transaksi']);
 Route::post('cek-saldo', [TransaksiController::class, 'cekSaldo']);
+Route::post('api/topup', [TransaksiController::class, 'topup']);
 Route::get('history', [TransaksiController::class, 'history']);
 Route::post('masuk', [MasukController::class, 'index']);
+Route::post('aktivasi', [AktivasiController::class, 'index']);

@@ -16,6 +16,7 @@ class CreateVouchersTable extends Migration
         Schema::create('vouchers', function (Blueprint $table) {
             $table->string('id', 255)->primary();
             $table->integer('saldo');
+            $table->string('status');
             $table->timestamps();
         });
     }

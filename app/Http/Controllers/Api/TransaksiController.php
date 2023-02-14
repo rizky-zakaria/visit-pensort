@@ -12,21 +12,29 @@ class TransaksiController extends Controller
     public function transaksi(Request $request)
     {
         $post = Voucher::find($request->id);
-        $saldo = $request->saldo * 5000;
-        if ($post->saldo < $saldo) {
+        if ($post->status == 'aktif') {
+            $saldo = $request->saldo * 5000;
+            if ($post->saldo < $request->saldo) {
+                return response()->json([
+                    'status' => FALSE,
+                    'message' => 'Saldo tidak cukup'
+                ]);
+            } else {
+                $post->saldo = $post->saldo - $request->saldo;
+                $post->update();
+                History::create([
+                    'history' => 'Berhasil melakukan transaksi pada ID ' . $request->id,
+                    'jenis' => 'transaksi'
+                ]);
+                return response()->json([
+                    'status' => TRUE,
+                    'message' => 'Berhasil melakukan transaksi'
+                ]);
+            }
+        } else {
             return response()->json([
                 'status' => FALSE,
-                'message' => 'Saldo tidak cukup'
-            ]);
-        } else {
-            $post->saldo = $post->saldo - $saldo;
-            $post->update();
-            History::create([
-                'history' => 'Berhasil melakukan transaksi pada ID ' . $request->id
-            ]);
-            return response()->json([
-                'status' => TRUE,
-                'message' => 'Berhasil melakukan transaksi'
+                'message' => 'Kartu anda belum diaktivasi'
             ]);
         }
     }
@@ -54,6 +62,28 @@ class TransaksiController extends Controller
             return response()->json([
                 'status' => FALSE,
                 'message' => 'Gagal mendapatkan saldo'
+            ]);
+        }
+    }
+
+    public function topup(Request $request)
+    {
+        $post = Voucher::find($request->id);
+        if ($post->status == 'aktif') {
+            $post->saldo = $post->saldo + $request->saldo;
+            $post->update();
+            History::create([
+                'history' => 'Berhasil melakukan TopUP pada ID ' . $request->id,
+                'jenis' => 'topup'
+            ]);
+            return response()->json([
+                'status' => TRUE,
+                'message' => 'Berhasil melakukan topup'
+            ]);
+        } else {
+            return response()->json([
+                'status' => FALSE,
+                'message' => 'Kartu anda belum diaktivasi'
             ]);
         }
     }

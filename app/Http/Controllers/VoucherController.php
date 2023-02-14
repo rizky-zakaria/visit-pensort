@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
@@ -21,15 +22,20 @@ class VoucherController extends Controller
     {
         $view = array();
         for ($i = 0; $i < $request->jumlah; $i++) {
-            $uuid5 = rand(0, 9999) . rand(0, 9999) . $i . rand(0, 123456);
+            $uuid5 = rand(0, 9999) . rand(0, 9999) . $i . rand(0, 123456) . date('ymdHis');
             $data = "http://localhost:8000/voucher/view-voucher/" . $uuid5;
             $qrcode = QrCode::size(100)->generate($uuid5);
             array_push($view, $qrcode);
             $post = new Voucher;
             $post->id = $uuid5;
             $post->saldo = 100000;
+            $post->status = 'non-aktif';
             $post->save();
         }
+        History::create([
+            'history' => 'Berhasil menggenerate voucher sebanyak: ' . $request->jumlah . ' pcs',
+            'jenis' => 'generate'
+        ]);
         return view('qrcode.banyak', compact('view'));
     }
 
